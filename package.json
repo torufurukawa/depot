@@ -12,7 +12,9 @@
   },
   "author": "Toru Furukawa",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "react-twitter-embed": "^2.0.8"
+  },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
