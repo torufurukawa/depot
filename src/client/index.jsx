@@ -1,21 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { TwitterTweetEmbed } from 'react-twitter-embed';
+import {TwitterTweetEmbed} from 'react-twitter-embed';
 
 
 //
 // Components
 //
 
-function App() {
+function App({getTweets}) {
   return (
     <div>
       <Navbar />
-      <TweetCollection />
+      <TweetCollection getTweets={getTweets} />
     </div>
   );
 }
+App.propTypes = {
+  getTweets: PropTypes.func.isRequired,
+};
 
 function Navbar() {
   return (
@@ -32,7 +35,13 @@ function Navbar() {
 class TweetCollection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {tweets: [{id: '1140550654378692608'}]};
+    this.state = {tweets: []};
+  }
+
+  componentDidMount() {
+    this.props.getTweets(null, (tweets) => {
+      this.setState({tweets: tweets});
+    });
   }
 
   render() {
@@ -45,6 +54,9 @@ class TweetCollection extends React.Component {
     );
   }
 }
+TweetCollection.propTypes = {
+  getTweets: PropTypes.func.isRequired,
+};
 
 function Tweet({id}) {
   return (
@@ -56,7 +68,17 @@ Tweet.propTypes = {
 };
 
 //
+// Database accessors
+//
+
+function getTweets(query, callback) {
+  google.script.run.withSuccessHandler(callback).getTweets(query);
+}
+
+//
 // Render
 //
 
-ReactDOM.render(<App />, document.getElementById('index'));
+ReactDOM.render(
+  <App getTweets={getTweets}/>,
+  document.getElementById('index'));

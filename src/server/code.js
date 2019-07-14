@@ -4,3 +4,11 @@ global.doGet = () => {
     .setTitle('TweetDepot')
     .addMetaTag('viewport', 'width=device-width,initial-scale=1.0');
 };
+
+//
+// API
+//
+
+global.getTweets = (query) => {
+  return [{id: '1146708814713896964'}];
+};
