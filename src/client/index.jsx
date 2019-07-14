@@ -1,8 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-ReactDOM.render(
-  <div>
+//
+// Components
+//
+
+function App() {
+  return (
+    <div>
+      <Navbar/>
+    </div>
+  );
+}
+
+function Navbar() {
+  return (
     <header className="navbar bg-dark pt-2 pb-2">
       <section className="navbar-section" />
       <section className="navbar-center">
@@ -10,6 +22,11 @@ ReactDOM.render(
       </section>
       <section className="navbar-section" />
     </header>
-  </div>,
-  document.getElementById('index')
-);
+  );
+}
+
+//
+// Render
+//
+
+ReactDOM.render(<App />, document.getElementById('index'));
