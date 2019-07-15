@@ -50,7 +50,7 @@ const eslintConfig = {
 };
 
 const appsscriptConfig = {
-  name: "COPY APPSSCRIPT.JSON",
+  name: "APPSSCRIPT",
   entry: "./appsscript.json",
   plugins: [
     new CleanWebpackPlugin([destination]),
