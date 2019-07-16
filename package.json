@@ -15,6 +15,7 @@
   "author": "Toru Furukawa",
   "license": "MIT",
   "dependencies": {
+    "react-router-dom": "^5.0.1",
     "react-twitter-embed": "^2.0.8"
   },
   "devDependencies": {

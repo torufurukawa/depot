@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {TwitterTweetEmbed} from 'react-twitter-embed';
+import {HashRouter as Router, Route, Link} from 'react-router-dom';
 
 //
 // Components
@@ -9,10 +10,13 @@ import {TwitterTweetEmbed} from 'react-twitter-embed';
 
 function App({getTweets}) {
   return (
-    <div>
-      <Navbar />
-      <Home getTweets={getTweets} />
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+        <Route path="/" exact render={() => <Home getTweets={getTweets}/>} />
+        <Route path="/settings/" render={() => <Settings/>} />
+      </div>
+    </Router>
   );
 }
 App.propTypes = {
@@ -24,9 +28,11 @@ function Navbar() {
     <header className="navbar bg-dark pt-2 pb-2">
       <section className="navbar-section" />
       <section className="navbar-center">
-        Depot
+        <Link className="text-light" to="/">Depot</Link>
       </section>
-      <section className="navbar-section" />
+      <section className="navbar-section pr-1">
+        <Link className="text-light" to="/settings/">Settings</Link>
+      </section>
     </header>
   );
 }
@@ -77,6 +83,7 @@ Tweet.propTypes = {
 // Settings
 
 function Settings() {
+  console.log('settings');
   return <div>settings</div>;
 }
 
