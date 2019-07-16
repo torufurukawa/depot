@@ -82,32 +82,34 @@ Tweet.propTypes = {
 
 // Settings
 
-function Settings() {
-  return (
-    <div className="container">
-      <div className="columns">
-        <div className="column col-12">
-         <div className="form-group">
-            <label className="form-label">Google Spreadsheet ID</label>
-            <input className="form-input" type="text"
-              placeholder="Google Spreadsheet ID" />
+class Settings extends React.Component {
+  render() {
+    return (
+      <div className="container">
+        <div className="columns">
+          <div className="column col-12">
+           <div className="form-group">
+              <label className="form-label">Google Spreadsheet ID</label>
+              <input className="form-input" type="text"
+                placeholder="Google Spreadsheet ID" />
+            </div>
           </div>
-        </div>
-        <div className="column col-2 col-ml-auto mt-2">
-          <button className="btn btn-primary" style={{width: '100%'}}>
-            Save
-          </button>
-        </div>
+          <div className="column col-2 col-ml-auto mt-2">
+            <button className="btn btn-primary" style={{width: '100%'}}>
+              Save
+            </button>
+          </div>
 
-        <div className="column col-12 mt-2">
-          <div className="toast">
-            <button className="btn btn-clear float-right"/>
-            Settings are saved.
+          <div className="column col-12 mt-2">
+            <div className="toast">
+              <button className="btn btn-clear float-right"/>
+              Settings are saved.
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 //
