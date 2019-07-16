@@ -83,8 +83,31 @@ Tweet.propTypes = {
 // Settings
 
 function Settings() {
-  console.log('settings');
-  return <div>settings</div>;
+  return (
+    <div className="container">
+      <columns>
+        <div className="column col-12">
+         <div className="form-group">
+            <label className="form-label">Google Spreadsheet ID</label>
+            <input className="form-input" type="text"
+              placeholder="Google Spreadsheet ID" />
+          </div>
+        </div>
+        <div className="column col-2 col-ml-auto mt-2">
+          <button className="btn btn-primary" style={{width: '100%'}}>
+            Save
+          </button>
+        </div>
+
+        <div className="column col-12 mt-2">
+          <div className="toast">
+            <button className="btn btn-clear float-right"/>
+            Settings are saved.
+          </div>
+        </div>
+      </columns>
+    </div>
+  );
 }
 
 //
