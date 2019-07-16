@@ -11,7 +11,7 @@ function App({getTweets}) {
   return (
     <div>
       <Navbar />
-      <TweetCollection getTweets={getTweets} />
+      <Home getTweets={getTweets} />
     </div>
   );
 }
@@ -30,6 +30,15 @@ function Navbar() {
     </header>
   );
 }
+
+// Home
+
+function Home({getTweets}) {
+  return <TweetCollection getTweets={getTweets} />;
+}
+Home.propTypes = {
+  getTweets: PropTypes.func.isRequired,
+};
 
 class TweetCollection extends React.Component {
   constructor(props) {
@@ -64,6 +73,12 @@ function Tweet({id}) {
 Tweet.propTypes = {
   id: PropTypes.string.isRequired,
 };
+
+// Settings
+
+function Settings() {
+  return <div>settings</div>;
+}
 
 //
 // Database accessors
