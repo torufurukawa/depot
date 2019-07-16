@@ -85,7 +85,7 @@ Tweet.propTypes = {
 function Settings() {
   return (
     <div className="container">
-      <columns>
+      <div className="columns">
         <div className="column col-12">
          <div className="form-group">
             <label className="form-label">Google Spreadsheet ID</label>
@@ -105,7 +105,7 @@ function Settings() {
             Settings are saved.
           </div>
         </div>
-      </columns>
+      </div>
     </div>
   );
 }
