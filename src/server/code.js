@@ -14,5 +14,12 @@ global.getTweets = () => {
 };
 
 global.getSettings = () => {
-  return {spreadsheetID: 'xxxxxx'};
+  const kvs = PropertiesService.getScriptProperties();
+  const spreadseetID = kvs.getProperty('SPREADSHEET_ID');
+  return {spreadsheetID: spreadseetID};
+};
+
+global.setSettings = (settings) => {
+  const kvs = PropertiesService.getScriptProperties();
+  kvs.setProperty('SPREADSHEET_ID', settings.spreadsheetID || '');
 };

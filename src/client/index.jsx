@@ -86,11 +86,16 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {didLoad: false, spreadsheetID: '', toast: ''};
+    this.save = this.save.bind(this);
   }
 
   async componentDidMount() {
     const settings = await getSettings();
     this.setState({didLoad: true, spreadsheetID: settings.spreadsheetID || ''});
+  }
+
+  async save() {
+    await setSettings({spreadsheetID: this.state.spreadsheetID});
   }
 
   render() {
@@ -111,7 +116,8 @@ class Settings extends React.Component {
           </div>
           <div className="column col-2 col-ml-auto mt-2">
             <button className="btn btn-primary" style={{width: '100%'}}
-              disabled={!this.state.didLoad}>
+              disabled={!this.state.didLoad}
+              onClick={this.save}>
               Save
             </button>
           </div>
@@ -147,6 +153,15 @@ function getSettings() {
       .withSuccessHandler((result) => resolve(result))
       .withFailureHandler((error) => resolve(error))
       .getSettings();
+  });
+}
+
+function setSettings(settings) {
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler((result) => resolve(result))
+      .withFailureHandler((error) => resolve(error))
+      .setSettings(settings);
   });
 }
 
