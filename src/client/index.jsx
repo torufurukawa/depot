@@ -83,6 +83,16 @@ Tweet.propTypes = {
 // Settings
 
 class Settings extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {didLoad: false, spreadsheetID: '', toast: ''};
+  }
+
+  async componentDidMount() {
+    const settings = await getSettings();
+    this.setState({didLoad: true, spreadsheetID: settings.spreadsheetID || ''});
+  }
+
   render() {
     return (
       <div className="container">
@@ -91,11 +101,17 @@ class Settings extends React.Component {
            <div className="form-group">
               <label className="form-label">Google Spreadsheet ID</label>
               <input className="form-input" type="text"
+                readOnly={!this.state.didLoad}
+                value={this.state.spreadsheetID}
+                onChange={(event)=>{
+                  this.setState({spreadsheetID: event.target.value});
+                }}
                 placeholder="Google Spreadsheet ID" />
             </div>
           </div>
           <div className="column col-2 col-ml-auto mt-2">
-            <button className="btn btn-primary" style={{width: '100%'}}>
+            <button className="btn btn-primary" style={{width: '100%'}}
+              disabled={!this.state.didLoad}>
               Save
             </button>
           </div>
@@ -122,6 +138,15 @@ function getTweets() {
       .withSuccessHandler((result) => resolve(result))
       .withFailureHandler((error) => resolve(error))
       .getTweets();
+  });
+}
+
+function getSettings() {
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler((result) => resolve(result))
+      .withFailureHandler((error) => resolve(error))
+      .getSettings();
   });
 }
 

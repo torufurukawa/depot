@@ -12,3 +12,7 @@ global.doGet = () => {
 global.getTweets = () => {
   return [{id: '1146708814713896964'}];
 };
+
+global.getSettings = () => {
+  return {spreadsheetID: 'xxxxxx'};
+};
