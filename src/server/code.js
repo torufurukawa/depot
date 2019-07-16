@@ -9,6 +9,6 @@ global.doGet = () => {
 // API
 //
 
-global.getTweets = (query) => {
+global.getTweets = () => {
   return [{id: '1146708814713896964'}];
 };

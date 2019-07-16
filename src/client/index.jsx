@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {TwitterTweetEmbed} from 'react-twitter-embed';
 
-
 //
 // Components
 //
@@ -39,7 +38,7 @@ class TweetCollection extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getTweets(null, (tweets) => {
+    this.props.getTweets().then((tweets) => {
       this.setState({tweets: tweets});
     });
   }
@@ -71,8 +70,13 @@ Tweet.propTypes = {
 // Database accessors
 //
 
-function getTweets(query, callback) {
-  google.script.run.withSuccessHandler(callback).getTweets(query);
+function getTweets() {
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler((result) => resolve(result))
+      .withFailureHandler((error) => resolve(error))
+      .getTweets();
+  });
 }
 
 //
