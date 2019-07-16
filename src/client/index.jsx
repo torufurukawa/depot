@@ -37,10 +37,9 @@ class TweetCollection extends React.Component {
     this.state = {tweets: []};
   }
 
-  componentDidMount() {
-    this.props.getTweets().then((tweets) => {
-      this.setState({tweets: tweets});
-    });
+  async componentDidMount() {
+    const tweets = await this.props.getTweets();
+    this.setState({tweets: tweets});
   }
 
   render() {
