@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import {TwitterTweetEmbed} from 'react-twitter-embed';
-import {HashRouter as Router, Route, Link} from 'react-router-dom';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 
 //
 // Components
 //
 
-function App({getTweets}) {
+function App({ getTweets }) {
   return (
     <Router>
       <div>
         <Navbar />
-        <Route path="/" exact render={() => <Home getTweets={getTweets}/>} />
-        <Route path="/settings/" render={() => <Settings/>} />
+        <Route path="/" exact render={() => <Home getTweets={getTweets} />} />
+        <Route path="/settings/" render={() => <Settings />} />
       </div>
     </Router>
   );
@@ -39,7 +39,7 @@ function Navbar() {
 
 // Home
 
-function Home({getTweets}) {
+function Home({ getTweets }) {
   return <TweetCollection getTweets={getTweets} />;
 }
 Home.propTypes = {
@@ -49,12 +49,12 @@ Home.propTypes = {
 class TweetCollection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {tweets: []};
+    this.state = { tweets: [] };
   }
 
   async componentDidMount() {
     const tweets = await this.props.getTweets();
-    this.setState({tweets: tweets});
+    this.setState({ tweets: tweets });
   }
 
   render() {
@@ -71,7 +71,7 @@ TweetCollection.propTypes = {
   getTweets: PropTypes.func.isRequired,
 };
 
-function Tweet({id}) {
+function Tweet({ id }) {
   return (
     <TwitterTweetEmbed tweetId={id} />
   );
@@ -85,17 +85,21 @@ Tweet.propTypes = {
 class Settings extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {didLoad: false, spreadsheetID: '', toast: ''};
+    this.state = {didLoad: false, spreadsheetID: '', notification: ''};
     this.save = this.save.bind(this);
   }
 
   async componentDidMount() {
     const settings = await getSettings();
-    this.setState({didLoad: true, spreadsheetID: settings.spreadsheetID || ''});
+    this.setState({
+      didLoad: true,
+      spreadsheetID: settings.spreadsheetID || '',
+    });
   }
 
   async save() {
     await setSettings({spreadsheetID: this.state.spreadsheetID});
+    this.setState({notification: 'Saved Spreadsheet ID.'});
   }
 
   render() {
@@ -103,13 +107,13 @@ class Settings extends React.Component {
       <div className="container">
         <div className="columns">
           <div className="column col-12">
-           <div className="form-group">
+            <div className="form-group">
               <label className="form-label">Google Spreadsheet ID</label>
               <input className="form-input" type="text"
                 readOnly={!this.state.didLoad}
                 value={this.state.spreadsheetID}
-                onChange={(event)=>{
-                  this.setState({spreadsheetID: event.target.value});
+                onChange={(event) => {
+                  this.setState({ spreadsheetID: event.target.value });
                 }}
                 placeholder="Google Spreadsheet ID" />
             </div>
@@ -122,17 +126,33 @@ class Settings extends React.Component {
             </button>
           </div>
 
-          <div className="column col-12 mt-2">
-            <div className="toast">
-              <button className="btn btn-clear float-right"/>
-              Settings are saved.
-            </div>
-          </div>
+          <Toast notification={this.state.notification}
+            onClick={()=>{
+              this.setState({notification: ''});
+            }}/>
         </div>
       </div>
     );
   }
 }
+
+function Toast({notification, onClick}) {
+  if (!notification) {
+    return null;
+  }
+  return (
+    <div className="column col-12 mt-2">
+      <div className="toast">
+        <button className="btn btn-clear float-right" onClick={onClick}/>
+        {notification}
+      </div>
+    </div>
+  );
+}
+Toast.propTypes = {
+  notification: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+};
 
 //
 // Database accessors
@@ -170,5 +190,5 @@ function setSettings(settings) {
 //
 
 ReactDOM.render(
-  <App getTweets={getTweets}/>,
+  <App getTweets={getTweets} />,
   document.getElementById('index'));
