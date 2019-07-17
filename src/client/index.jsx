@@ -83,9 +83,9 @@ Tweet.propTypes = {
 // Settings
 
 class Settings extends React.Component {
-  constructor({server, ...props}) {
+  constructor(props) {
     super(props);
-    this.server = server;
+    this.server = this.props.server;
     this.state = {didLoad: false, spreadsheetID: '', notification: ''};
     this.save = this.save.bind(this);
   }
