@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { TwitterTweetEmbed } from 'react-twitter-embed';
-import { HashRouter as Router, Route, Link } from 'react-router-dom';
+import {TwitterTweetEmbed} from 'react-twitter-embed';
+import {HashRouter as Router, Route, Link} from 'react-router-dom';
 
 //
 // Components
 //
 
-function App({ getTweets }) {
+function App({getTweets}) {
   return (
     <Router>
       <div>
@@ -39,7 +39,7 @@ function Navbar() {
 
 // Home
 
-function Home({ getTweets }) {
+function Home({getTweets}) {
   return <TweetCollection getTweets={getTweets} />;
 }
 Home.propTypes = {
@@ -49,12 +49,12 @@ Home.propTypes = {
 class TweetCollection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tweets: [] };
+    this.state = {tweets: []};
   }
 
   async componentDidMount() {
     const tweets = await this.props.getTweets();
-    this.setState({ tweets: tweets });
+    this.setState({tweets: tweets});
   }
 
   render() {
@@ -71,7 +71,7 @@ TweetCollection.propTypes = {
   getTweets: PropTypes.func.isRequired,
 };
 
-function Tweet({ id }) {
+function Tweet({id}) {
   return (
     <TwitterTweetEmbed tweetId={id} />
   );
@@ -113,7 +113,7 @@ class Settings extends React.Component {
                 readOnly={!this.state.didLoad}
                 value={this.state.spreadsheetID}
                 onChange={(event) => {
-                  this.setState({ spreadsheetID: event.target.value });
+                  this.setState({spreadsheetID: event.target.value});
                 }}
                 placeholder="Google Spreadsheet ID" />
             </div>
