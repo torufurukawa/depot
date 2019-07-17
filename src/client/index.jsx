@@ -162,15 +162,6 @@ Toast.propTypes = {
 // Database accessors
 //
 
-function setSettings(settings) {
-  return new Promise((resolve, reject) => {
-    google.script.run
-      .withSuccessHandler((result) => resolve(result))
-      .withFailureHandler((error) => resolve(error))
-      .setSettings(settings);
-  });
-}
-
 // turns google.script.run into an object with a promise api
 function scriptRunPromise() {
   const gs = {};
