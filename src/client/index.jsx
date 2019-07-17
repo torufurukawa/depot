@@ -8,19 +8,19 @@ import {HashRouter as Router, Route, Link} from 'react-router-dom';
 // Components
 //
 
-function App({getTweets}) {
+function App({server}) {
   return (
     <Router>
       <div>
         <Navbar />
-        <Route path="/" exact render={() => <Home getTweets={getTweets} />} />
-        <Route path="/settings/" render={() => <Settings />} />
+        <Route path="/" exact render={() => <Home server={server} />} />
+        <Route path="/settings/" render={() => <Settings server={server} />} />
       </div>
     </Router>
   );
 }
 App.propTypes = {
-  getTweets: PropTypes.func.isRequired,
+  server: PropTypes.object,
 };
 
 function Navbar() {
@@ -39,11 +39,11 @@ function Navbar() {
 
 // Home
 
-function Home({getTweets}) {
-  return <TweetCollection getTweets={getTweets} />;
+function Home({server}) {
+  return <TweetCollection server={server} />;
 }
 Home.propTypes = {
-  getTweets: PropTypes.func.isRequired,
+  server: PropTypes.object.isRequired,
 };
 
 class TweetCollection extends React.Component {
@@ -53,7 +53,7 @@ class TweetCollection extends React.Component {
   }
 
   async componentDidMount() {
-    const tweets = await this.props.getTweets();
+    const tweets = await this.props.server.getTweets();
     this.setState({tweets: tweets});
   }
 
@@ -68,7 +68,7 @@ class TweetCollection extends React.Component {
   }
 }
 TweetCollection.propTypes = {
-  getTweets: PropTypes.func.isRequired,
+  server: PropTypes.object.isRequired,
 };
 
 function Tweet({id}) {
@@ -83,14 +83,15 @@ Tweet.propTypes = {
 // Settings
 
 class Settings extends React.Component {
-  constructor(props) {
+  constructor({server, ...props}) {
     super(props);
+    this.server = server;
     this.state = {didLoad: false, spreadsheetID: '', notification: ''};
     this.save = this.save.bind(this);
   }
 
   async componentDidMount() {
-    const settings = await getSettings();
+    const settings = await this.server.getSettings();
     this.setState({
       didLoad: true,
       spreadsheetID: settings.spreadsheetID || '',
@@ -98,7 +99,7 @@ class Settings extends React.Component {
   }
 
   async save() {
-    await setSettings({spreadsheetID: this.state.spreadsheetID});
+    await this.server.setSettings({spreadsheetID: this.state.spreadsheetID});
     this.setState({notification: 'Saved Spreadsheet ID.'});
   }
 
@@ -135,6 +136,9 @@ class Settings extends React.Component {
     );
   }
 }
+Settings.propTypes = {
+  server: PropTypes.object.isRequired,
+};
 
 function Toast({notification, onClick}) {
   if (!notification) {
@@ -158,24 +162,6 @@ Toast.propTypes = {
 // Database accessors
 //
 
-function getTweets() {
-  return new Promise((resolve, reject) => {
-    google.script.run
-      .withSuccessHandler((result) => resolve(result))
-      .withFailureHandler((error) => resolve(error))
-      .getTweets();
-  });
-}
-
-function getSettings() {
-  return new Promise((resolve, reject) => {
-    google.script.run
-      .withSuccessHandler((result) => resolve(result))
-      .withFailureHandler((error) => resolve(error))
-      .getSettings();
-  });
-}
-
 function setSettings(settings) {
   return new Promise((resolve, reject) => {
     google.script.run
@@ -185,10 +171,29 @@ function setSettings(settings) {
   });
 }
 
+// turns google.script.run into an object with a promise api
+function scriptRunPromise() {
+  const gs = {};
+  const ks = Object.keys(google.script.run);
+  for (let i=0; i < ks.length; i++) {
+    gs[ks[i]] = (function(k) {
+      return function(...args) {
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[k]
+            .apply(google.script.run, args);
+        });
+      };
+    })(ks[i]);
+  }
+  return gs;
+}
+
 //
 // Render
 //
 
 ReactDOM.render(
-  <App getTweets={getTweets} />,
+  <App server={scriptRunPromise()} />,
   document.getElementById('index'));
